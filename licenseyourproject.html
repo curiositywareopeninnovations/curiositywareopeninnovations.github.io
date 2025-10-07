@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License Your Project - COI Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background: #212529;
+            color: #f8f8f2;
+            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+            font-size: 1em;
+            border-radius: 8px;
+            padding: 1em;
+            margin-bottom: 1em;
+            position: relative;
+            overflow-x: auto;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+        }
+        .code-label {
+            font-weight: bold;
+            margin-bottom: 0.5em;
+        }
+        .license-logo {
+            border: none;
+            background: none;
+            padding: 0;
+        }
+        .form-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1em 1.5em;
+            margin-bottom: 2em;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4" style="max-width: 800px;">
+        <h1 class="mb-4 text-center">License your project</h1>
+        <div class="form-section">
+            <form id="licenseForm">
+                <div class="row mb-2">
+                    <div class="col-md-6 mb-2">
+                        <label for="projectName" class="form-label">Your Project Name</label>
+                        <input type="text" class="form-control" id="projectName" placeholder="e.g. MyCoolApp" required>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label for="licenseType" class="form-label">License Type</label>
+                        <select class="form-select" id="licenseType">
+                            <option value="COI OS">COI Open Software License</option>
+                            <option value="COI OH">COI Open Hardware License</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6 mb-2">
+                        <label for="baseProjectName" class="form-label">Base Project Name <span style="color:#888">(if any)</span></label>
+                        <input type="text" class="form-control" id="baseProjectName" placeholder="e.g. CuriositywareLib">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label for="baseAuthor" class="form-label">Base Project Author <span style="color:#888">(if any)</span></label>
+                        <input type="text" class="form-control" id="baseAuthor" placeholder="e.g. Dominik István Bálló">
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label for="baseRepo" class="form-label">Base Project GitHub Repository <span style="color:#888">(if any)</span></label>
+                    <input type="url" class="form-control" id="baseRepo" placeholder="e.g. https://github.com/curiositywareopeninnovations/curiositywarelib">
+                </div>
+                <button type="button" class="btn btn-primary mt-2" onclick="generateBadge()">Generate License Badge & Attribution</button>
+            </form>
+        </div>
+
+        <div id="resultSection" style="display:none;">
+            <div class="code-label" id="badgeLabel"></div>
+            <div class="code-block" id="licenseBadgeBlock">
+                <button class="btn btn-sm btn-light copy-btn" onclick="copyCode('licenseBadgeBlock')">Copy</button>
+                <code id="licenseBadgeCode"></code>
+            </div>
+            <div class="code-label">Attribution HTML</div>
+            <div class="code-block" id="attributionBlock">
+                <button class="btn btn-sm btn-light copy-btn" onclick="copyCode('attributionBlock')">Copy</button>
+                <code id="attributionCode"></code>
+            </div>
+        </div>
+    </div>
+    <script>
+        function generateBadge() {
+            const projectName = document.getElementById('projectName').value.trim();
+            const licenseType = document.getElementById('licenseType').value;
+            const baseProjectName = document.getElementById('baseProjectName').value.trim();
+            const baseAuthor = document.getElementById('baseAuthor').value.trim();
+            const baseRepo = document.getElementById('baseRepo').value.trim();
+
+            let logoUrl = "";
+            let licenseUrl = "";
+            let badgeLabel = "";
+            let licenseShort = "";
+
+            if (licenseType === "COI OS") {
+                logoUrl = "https://curiositywareopeninnovations.github.io/Open%20Software%20License.png";
+                licenseUrl = "https://curiositywareopeninnovations.github.io/COI%20OS.html";
+                badgeLabel = "COI Open Software License HTML badge";
+                licenseShort = "COI OS";
+            } else {
+                logoUrl = "https://curiositywareopeninnovations.github.io/Open%20Hardware%20License.png";
+                licenseUrl = "https://curiositywareopeninnovations.github.io/COI%20OH.html";
+                badgeLabel = "COI Open Hardware License HTML badge";
+                licenseShort = "COI OH";
+            }
+
+            // Badge HTML
+            const badgeHtml = `&lt;a href="${licenseUrl}" target="_blank"&gt;<br>&nbsp;&nbsp;&lt;img src="${logoUrl}" alt="${licenseType} Logo" style="height:40px;border-radius:6px;border:1px solid #ccc;"&gt;<br>&lt;/a&gt;`;
+
+            // Attribution HTML
+            let attributionHtml = `The <strong>${projectName}</strong> is licensed using <a href="${licenseUrl}" target="_blank">${licenseType}</a>`;
+            if (baseProjectName && baseAuthor && baseRepo) {
+                attributionHtml += `<br>This project is based on <strong>${baseProjectName}</strong> by ${baseAuthor}, which can be accessed at <a href="${baseRepo}" target="_blank">${baseRepo}</a>.`;
+            }
+            attributionHtml = attributionHtml.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+
+            document.getElementById('badgeLabel').innerText = badgeLabel;
+            document.getElementById('licenseBadgeCode').innerHTML = badgeHtml;
+            document.getElementById('attributionCode').innerHTML = attributionHtml;
+
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function copyCode(id) {
+            const codeBlock = document.getElementById(id).querySelector('code');
+            // Remove HTML tags and decode entities for clipboard
+            const html = codeBlock.innerHTML
+                .replace(/<br>/g, '\n')
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&amp;/g, '&');
+            navigator.clipboard.writeText(html);
+        }
+    </script>
+</body>
+</html>
