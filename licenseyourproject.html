@@ -28,11 +28,6 @@
             font-weight: bold;
             margin-bottom: 0.5em;
         }
-        .license-logo {
-            border: none;
-            background: none;
-            padding: 0;
-        }
         .form-section {
             background: #f8f9fa;
             border-radius: 8px;
@@ -88,12 +83,12 @@
             <div class="code-label" id="badgeLabel"></div>
             <div class="code-block" id="licenseBadgeBlock">
                 <button class="btn btn-sm btn-light copy-btn" onclick="copyCode('licenseBadgeBlock')">Copy</button>
-                <code id="licenseBadgeCode"></code>
+                <pre id="licenseBadgeCode" style="background:transparent;color:inherit;border:none;padding:0;margin:0;"></pre>
             </div>
             <div class="code-label">Attribution HTML</div>
             <div class="code-block" id="attributionBlock">
                 <button class="btn btn-sm btn-light copy-btn" onclick="copyCode('attributionBlock')">Copy</button>
-                <code id="attributionCode"></code>
+                <pre id="attributionCode" style="background:transparent;color:inherit;border:none;padding:0;margin:0;"></pre>
             </div>
         </div>
     </div>
@@ -109,48 +104,39 @@
             let logoUrl = "";
             let licenseUrl = "";
             let badgeLabel = "";
-            let licenseShort = "";
 
             if (licenseType === "COI OS") {
                 logoUrl = "https://curiositywareopeninnovations.github.io/Open%20Software%20License.png";
                 licenseUrl = "https://curiositywareopeninnovations.github.io/COI%20OS.html";
                 badgeLabel = "COI Open Software License HTML badge";
-                licenseShort = "COI OS";
             } else {
                 logoUrl = "https://curiositywareopeninnovations.github.io/Open%20Hardware%20License.png";
                 licenseUrl = "https://curiositywareopeninnovations.github.io/COI%20OH.html";
                 badgeLabel = "COI Open Hardware License HTML badge";
-                licenseShort = "COI OH";
             }
 
             // Badge HTML
-            let badgeHtml = `&lt;a href="${licenseUrl}" target="_blank"&gt;<br>&nbsp;&nbsp;&lt;img src="${logoUrl}" alt="${licenseType} Logo" style="height:40px;border-radius:6px;border:1px solid #ccc;"&gt;<br>&lt;/a&gt;<br>`;
-            badgeHtml += `&lt;div style="font-size:1em;margin-top:0.5em;"&gt;The <strong>${projectName}</strong> is licensed under &lt;a href="${licenseUrl}" target="_blank"&gt;${licenseType}&lt;/a&gt; and created by <strong>${authorName}</strong>&lt;/div&gt;`;
+            let badgeHtml = `<a href="${licenseUrl}" target="_blank">
+  <img src="${logoUrl}" alt="${licenseType} Logo" style="height:40px;border-radius:6px;border:1px solid #ccc;">
+</a>
+<div style="font-size:1em;margin-top:0.5em;">The <strong>${projectName}</strong> is licensed under <a href="${licenseUrl}" target="_blank">${licenseType}</a> and created by <strong>${authorName}</strong></div>`;
 
             // Attribution HTML
             let attributionHtml = "";
             if (baseProjectName && baseAuthor && baseRepo) {
-                attributionHtml = `This project is based on <strong>${baseProjectName}</strong> by ${baseAuthor}, which can be accessed at <a href="${baseRepo}" target="_blank">${baseRepo}</a>.`;
+                attributionHtml = `This project is based on <strong>${baseProjectName}</strong> which is created by <strong>${baseAuthor}</strong> and the GitHub repo is <a href="${baseRepo}" target="_blank">${baseRepo}</a>.`;
             }
-            attributionHtml = attributionHtml.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
 
             document.getElementById('badgeLabel').innerText = badgeLabel;
-            document.getElementById('licenseBadgeCode').innerHTML = badgeHtml;
-            document.getElementById('attributionCode').innerHTML = attributionHtml;
+            document.getElementById('licenseBadgeCode').textContent = badgeHtml;
+            document.getElementById('attributionCode').textContent = attributionHtml;
 
             document.getElementById('resultSection').style.display = 'block';
         }
 
         function copyCode(id) {
-            const codeBlock = document.getElementById(id).querySelector('code');
-            // Remove HTML tags and decode entities for clipboard
-            const html = codeBlock.innerHTML
-                .replace(/<br>/g, '\n')
-                .replace(/&nbsp;/g, ' ')
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>')
-                .replace(/&amp;/g, '&');
-            navigator.clipboard.writeText(html);
+            const codeBlock = document.getElementById(id).querySelector('pre');
+            navigator.clipboard.writeText(codeBlock.textContent);
         }
     </script>
 </body>
