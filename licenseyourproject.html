@@ -53,26 +53,32 @@
                         <input type="text" class="form-control" id="projectName" placeholder="e.g. MyCoolApp" required>
                     </div>
                     <div class="col-md-6 mb-2">
+                        <label for="authorName" class="form-label">Your Name (Project Creator)</label>
+                        <input type="text" class="form-control" id="authorName" placeholder="e.g. Jane Developer" required>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6 mb-2">
                         <label for="licenseType" class="form-label">License Type</label>
                         <select class="form-select" id="licenseType">
                             <option value="COI OS">COI Open Software License</option>
                             <option value="COI OH">COI Open Hardware License</option>
                         </select>
                     </div>
-                </div>
-                <div class="row mb-2">
                     <div class="col-md-6 mb-2">
                         <label for="baseProjectName" class="form-label">Base Project Name <span style="color:#888">(if any)</span></label>
                         <input type="text" class="form-control" id="baseProjectName" placeholder="e.g. CuriositywareLib">
                     </div>
+                </div>
+                <div class="row mb-2">
                     <div class="col-md-6 mb-2">
                         <label for="baseAuthor" class="form-label">Base Project Author <span style="color:#888">(if any)</span></label>
                         <input type="text" class="form-control" id="baseAuthor" placeholder="e.g. Dominik István Bálló">
                     </div>
-                </div>
-                <div class="mb-2">
-                    <label for="baseRepo" class="form-label">Base Project GitHub Repository <span style="color:#888">(if any)</span></label>
-                    <input type="url" class="form-control" id="baseRepo" placeholder="e.g. https://github.com/curiositywareopeninnovations/curiositywarelib">
+                    <div class="col-md-6 mb-2">
+                        <label for="baseRepo" class="form-label">Base Project GitHub Repository <span style="color:#888">(if any)</span></label>
+                        <input type="url" class="form-control" id="baseRepo" placeholder="e.g. https://github.com/curiositywareopeninnovations/curiositywarelib">
+                    </div>
                 </div>
                 <button type="button" class="btn btn-primary mt-2" onclick="generateBadge()">Generate License Badge & Attribution</button>
             </form>
@@ -94,6 +100,7 @@
     <script>
         function generateBadge() {
             const projectName = document.getElementById('projectName').value.trim();
+            const authorName = document.getElementById('authorName').value.trim();
             const licenseType = document.getElementById('licenseType').value;
             const baseProjectName = document.getElementById('baseProjectName').value.trim();
             const baseAuthor = document.getElementById('baseAuthor').value.trim();
@@ -117,12 +124,13 @@
             }
 
             // Badge HTML
-            const badgeHtml = `&lt;a href="${licenseUrl}" target="_blank"&gt;<br>&nbsp;&nbsp;&lt;img src="${logoUrl}" alt="${licenseType} Logo" style="height:40px;border-radius:6px;border:1px solid #ccc;"&gt;<br>&lt;/a&gt;`;
+            let badgeHtml = `&lt;a href="${licenseUrl}" target="_blank"&gt;<br>&nbsp;&nbsp;&lt;img src="${logoUrl}" alt="${licenseType} Logo" style="height:40px;border-radius:6px;border:1px solid #ccc;"&gt;<br>&lt;/a&gt;<br>`;
+            badgeHtml += `&lt;div style="font-size:1em;margin-top:0.5em;"&gt;The <strong>${projectName}</strong> is licensed under &lt;a href="${licenseUrl}" target="_blank"&gt;${licenseType}&lt;/a&gt; and created by <strong>${authorName}</strong>&lt;/div&gt;`;
 
             // Attribution HTML
-            let attributionHtml = `The <strong>${projectName}</strong> is licensed using <a href="${licenseUrl}" target="_blank">${licenseType}</a>`;
+            let attributionHtml = "";
             if (baseProjectName && baseAuthor && baseRepo) {
-                attributionHtml += `<br>This project is based on <strong>${baseProjectName}</strong> by ${baseAuthor}, which can be accessed at <a href="${baseRepo}" target="_blank">${baseRepo}</a>.`;
+                attributionHtml = `This project is based on <strong>${baseProjectName}</strong> by ${baseAuthor}, which can be accessed at <a href="${baseRepo}" target="_blank">${baseRepo}</a>.`;
             }
             attributionHtml = attributionHtml.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
 
