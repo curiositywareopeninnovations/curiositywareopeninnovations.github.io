@@ -35,6 +35,18 @@
             margin-bottom: 2em;
             box-shadow: 0 1px 4px rgba(0,0,0,0.04);
         }
+        .live-demo-label {
+            font-weight: bold;
+            margin-bottom: 0.5em;
+            color: #198754;
+        }
+        .live-demo-block {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1em;
+            margin-bottom: 1em;
+            border: 1px solid #dee2e6;
+        }
     </style>
 </head>
 <body>
@@ -85,11 +97,15 @@
                 <button class="btn btn-sm btn-light copy-btn" onclick="copyCode('licenseBadgeBlock')">Copy</button>
                 <pre id="licenseBadgeCode" style="background:transparent;color:inherit;border:none;padding:0;margin:0;"></pre>
             </div>
+            <div class="live-demo-label">Live Badge Demo</div>
+            <div class="live-demo-block" id="licenseBadgeDemo"></div>
             <div class="code-label">Attribution HTML</div>
             <div class="code-block" id="attributionBlock">
                 <button class="btn btn-sm btn-light copy-btn" onclick="copyCode('attributionBlock')">Copy</button>
                 <pre id="attributionCode" style="background:transparent;color:inherit;border:none;padding:0;margin:0;"></pre>
             </div>
+            <div class="live-demo-label">Live Attribution Demo</div>
+            <div class="live-demo-block" id="attributionDemo"></div>
         </div>
     </div>
     <script>
@@ -121,15 +137,25 @@
 </a>
 <div style="font-size:1em;margin-top:0.5em;">The <strong>${projectName}</strong> is licensed under <a href="${licenseUrl}" target="_blank">${licenseType}</a> and created by <strong>${authorName}</strong></div>`;
 
-            // Attribution HTML
+            // Attribution HTML (attention-grabbing)
             let attributionHtml = "";
-            if (baseProjectName && baseAuthor && baseRepo) {
-                attributionHtml = `This project is based on <strong>${baseProjectName}</strong> which is created by <strong>${baseAuthor}</strong> and the GitHub repo is <a href="${baseRepo}" target="_blank">${baseRepo}</a>.`;
+            if (baseProjectName && baseAuthor) {
+                attributionHtml = `<div style="background:#fff3cd;border:1px solid #ffeeba;color:#856404;padding:1em;border-radius:8px;font-weight:bold;font-size:1.1em;">
+    ⚠️ <span style="font-size:1.2em;">Attribution Required!</span><br>
+    This project is based on <strong>${baseProjectName}</strong> which is created by <strong>${baseAuthor}</strong>`;
+                if (baseRepo) {
+                    attributionHtml += ` and the GitHub repo is <a href="${baseRepo}" target="_blank">${baseRepo}</a>`;
+                }
+                attributionHtml += `.</div>`;
             }
 
             document.getElementById('badgeLabel').innerText = badgeLabel;
             document.getElementById('licenseBadgeCode').textContent = badgeHtml;
             document.getElementById('attributionCode').textContent = attributionHtml;
+
+            // Live demo rendering
+            document.getElementById('licenseBadgeDemo').innerHTML = badgeHtml;
+            document.getElementById('attributionDemo').innerHTML = attributionHtml;
 
             document.getElementById('resultSection').style.display = 'block';
         }
