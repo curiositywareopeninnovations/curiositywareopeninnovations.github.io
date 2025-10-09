@@ -1,0 +1,84 @@
+name: "COI Certified Innovation Application"
+description: "Apply for the COI Certified Innovation badge to verify your project's innovation and quality."
+title: "[COI Certification Request] <Project Name>"
+labels: ["COI Certification", "review needed"]
+assignees: ["CuriositywareTeam"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🧠 Curiosityware Open Innovations — COI Certified Innovation
+        Thank you for applying for the **COI Certified Innovation** badge!  
+        Please fill in the following details accurately. Incomplete applications may be rejected.
+
+  - type: input
+    id: project_name
+    attributes:
+      label: "Project Name"
+      description: "The official name of your project."
+      placeholder: "Example: QuantumEngine"
+
+  - type: input
+    id: github_repo
+    attributes:
+      label: "GitHub Repository URL"
+      description: "Link to your project's public GitHub repository."
+      placeholder: "https://github.com/username/project"
+
+  - type: textarea
+    id: project_description
+    attributes:
+      label: "Project Description"
+      description: "Provide a clear summary of your project's purpose, innovation, and goals."
+      placeholder: "Describe what your project does, who it's for, and what makes it innovative."
+      render: markdown
+
+  - type: dropdown
+    id: innovation_type
+    attributes:
+      label: "Type of Innovation"
+      description: "Select what best describes your project's innovation area."
+      options:
+        - AI / Machine Learning
+        - Open Source Tool / Framework
+        - Hardware / Embedded System
+        - Scientific or Educational Project
+        - Social or Environmental Innovation
+        - Other
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: "Innovation Impact"
+      description: "Explain how your project contributes to open innovation or benefits the community."
+      placeholder: "e.g. Promotes AI education, enables sustainable tech, improves accessibility..."
+
+  - type: checkboxes
+    id: requirements
+    attributes:
+      label: "Certification Requirements"
+      description: "Please confirm that your project meets these requirements."
+      options:
+        - label: "The project is open source (public GitHub repository)."
+          required: true
+        - label: "The project includes a README explaining installation, usage, and contribution guidelines."
+          required: true
+        - label: "The project demonstrates clear originality and technical value."
+          required: true
+
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: "Additional Information (optional)"
+      description: "Anything else you'd like us to know?"
+      placeholder: "Links to demos, articles, or documentation."
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ✅ Once your application is reviewed and approved, your project will receive:
+        - A **COI Certified Innovation Badge**
+        - Listing on the **Curiosityware Open Innovations website**
+        - Option to join the COI developer community and future collaborations.
