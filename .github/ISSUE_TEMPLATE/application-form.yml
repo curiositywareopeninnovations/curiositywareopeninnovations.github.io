@@ -1,0 +1,99 @@
+name: "Curiosityware Open Innovations – Membership Application"
+description: "Fill out this form if you want to join the Curiosityware Open Innovations open-source community."
+title: "[Application] <Your Name>"
+labels: ["application", "pending-review"]
+assignees:
+  - admin
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 👋 Welcome to the Curiosityware Open Innovations Application Form!
+
+        Thank you for your interest in joining the COI open-source community.  
+        Please complete the form below honestly and in detail so we can assess your technical background and interests.
+
+  - type: input
+    id: full_name
+    attributes:
+      label: "Full Name"
+      description: "Please enter your full name."
+      placeholder: "e.g., Adam Smith"
+    validations:
+      required: true
+
+  - type: input
+    id: github_username
+    attributes:
+      label: "GitHub Username"
+      description: "Your GitHub profile name."
+      placeholder: "e.g., adamsmith-dev"
+    validations:
+      required: true
+
+  - type: input
+    id: email
+    attributes:
+      label: "Email Address"
+      description: "Your preferred contact email."
+      placeholder: "example@email.com"
+    validations:
+      required: true
+
+  - type: textarea
+    id: skills
+    attributes:
+      label: "Technical Skills & Experience"
+      description: "List the programming languages, tools, and areas of expertise you’re comfortable with."
+      placeholder: "e.g., Rust, Python, Web Development, AI Systems, Git, Linux"
+    validations:
+      required: true
+
+  - type: input
+    id: portfolio
+    attributes:
+      label: "LinkedIn / Portfolio Link (optional)"
+      description: "If you have a public portfolio or LinkedIn profile, include it here."
+      placeholder: "https://linkedin.com/in/username"
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: "Motivation"
+      description: "Why do you want to join COI, and what kind of projects would you like to contribute to?"
+      placeholder: "Briefly describe your goals, interests, and how you’d like to contribute."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: contribution_type
+    attributes:
+      label: "Preferred Contribution Role"
+      options:
+        - Developer
+        - Documentation / Writing
+        - Design / UI-UX
+        - Research / Innovation
+        - Project Management
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: license_agreement
+    attributes:
+      label: "License Agreement"
+      description: "COI projects operate under the COI OS and COI OH licenses. You must agree to these terms before joining."
+      options:
+        - label: "I agree that my contributions will be licensed under the COI OS / COI OH open-source licenses."
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ✅ **After submission:**  
+        Your application will be reviewed by the Curiosityware Open Innovations team.  
+        If approved, you’ll receive an invitation to join the COI GitHub organization and Discord community.  
+        Thank you for helping build the future of open innovation! 🚀
