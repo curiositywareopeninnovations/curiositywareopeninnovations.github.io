@@ -1,0 +1,52 @@
+name: Invite Member on Join Request
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  invite_member:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Ellenőrizzük, hogy a komment /approve
+      - name: Check if comment is /approve by authorized reviewer
+        id: auth
+        run: |
+          APPROVE_COMMENT="/approve"
+          COMMENT_BODY="${{ github.event.comment.body }}"
+          COMMENTER="${{ github.event.comment.user.login }}"
+          # Engedélyezett reviewer-ek
+          AUTHORIZED_REVIEWERS=("CuriositywareOwner" "Maintainer1" "Maintainer2")
+
+          AUTHORIZED=false
+          if [[ "$COMMENT_BODY" == *"$APPROVE_COMMENT"* ]]; then
+            for reviewer in "${AUTHORIZED_REVIEWERS[@]}"; do
+              if [[ "$COMMENTER" == "$reviewer" ]]; then
+                AUTHORIZED=true
+              fi
+            done
+          fi
+
+          echo "authorized=$AUTHORIZED" >> $GITHUB_OUTPUT
+
+      # 2️⃣ Megáll, ha nem engedélyezett
+      - name: Stop if not authorized
+        if: steps.auth.outputs.authorized != 'true'
+        run: |
+          echo "Commenter is not authorized or comment is not /approve. Exiting."
+          exit 0
+
+      # 3️⃣ Meghívás a szervezetbe
+      - name: Invite user to organization
+        env:
+          ORG: curiositywareopeninnovations
+          TOKEN: ${{ secrets.ORG_ADMIN_TOKEN }}
+          USERNAME: ${{ github.event.issue.user.login }}
+        run: |
+          echo "Inviting $USERNAME to organization $ORG..."
+          curl -X PUT \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token $TOKEN" \
+            https://api.github.com/orgs/$ORG/memberships/$USERNAME \
+            -d '{"role": "member"}'

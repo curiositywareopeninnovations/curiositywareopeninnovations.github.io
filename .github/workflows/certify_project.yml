@@ -1,0 +1,40 @@
+name: Add Certified Project
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  approve_project:
+    if: contains(github.event.comment.body, '/approve')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Extract project info from issue
+        id: extract
+        run: |
+          echo "Reading issue data..."
+          TITLE="${{ github.event.issue.title }}"
+          BODY="${{ github.event.issue.body }}"
+          REPO_URL=$(echo "$BODY" | grep -Eo 'https://github.com/[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+' | head -1)
+          PROJECT_NAME=$(echo "$TITLE" | sed 's/\[COI Certification Request\] //g')
+          APPROVER="${{ github.event.comment.user.login }}"
+          DATE=$(date -u +"%Y-%m-%d")
+          echo "repo_url=$REPO_URL" >> $GITHUB_OUTPUT
+          echo "project_name=$PROJECT_NAME" >> $GITHUB_OUTPUT
+          echo "approver=$APPROVER" >> $GITHUB_OUTPUT
+          echo "date=$DATE" >> $GITHUB_OUTPUT
+
+      - name: Update certified_projects.json
+        run: |
+          jq '. += [{"project_name": "${{ steps.extract.outputs.project_name }}", "repo_url": "${{ steps.extract.outputs.repo_url }}", "approved_by": "${{ steps.extract.outputs.approver }}", "date": "${{ steps.extract.outputs.date }}"}]' data/certified_projects.json > tmp.json && mv tmp.json data/certified_projects.json
+
+      - name: Commit changes
+        run: |
+          git config user.name "COI Bot"
+          git config user.email "bot@curiosityware.org"
+          git add data/certified_projects.json
+          git commit -m "Add certified project: ${{ steps.extract.outputs.project_name }}"
+          git push

@@ -54,6 +54,58 @@
                 <strong>COI Certified Innovation</strong> is awarded to projects that demonstrate outstanding creativity, openness, and impact in the open innovation ecosystem.
             </p>
         </section>
+        <section id="certified-projects">
+  <h2>🏅 COI Certified Innovations</h2>
+  <p>These projects have officially received the <strong>COI Certified Innovation</strong> badge.</p>
+
+  <table id="projects-table">
+    <thead>
+      <tr>
+        <th>Project Name</th>
+        <th>Repository</th>
+        <th>Approved By</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+<script>
+fetch('https://curiositywareopeninnovations.github.io/data/certified_projects.json')
+  .then(response => response.json())
+  .then(data => {
+    const tbody = document.querySelector('#projects-table tbody');
+    data.forEach(proj => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${proj.project_name}</td>
+        <td><a href="${proj.repo_url}" target="_blank">View Repository</a></td>
+        <td>${proj.approved_by}</td>
+        <td>${proj.date}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  })
+  .catch(err => console.error('Error loading certified projects:', err));
+</script>
+
+<style>
+#projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+#projects-table th, #projects-table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: left;
+}
+#projects-table th {
+  background-color: #f4f4f8;
+}
+</style>
+
     </main>
     <footer class="text-center mt-4">
         <p>&copy; 2025 Dominik István Bálló, Curiosityware Open Innovations. All rights reserved.</p>
